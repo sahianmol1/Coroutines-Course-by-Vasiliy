@@ -14,14 +14,18 @@ import com.techyourchance.coroutines.R
 import com.techyourchance.coroutines.common.BaseFragment
 import com.techyourchance.coroutines.demonstrations.uncaughtexception.LoggedInUser
 import com.techyourchance.coroutines.demonstrations.uncaughtexception.LoginUseCaseUncaughtException
-import com.techyourchance.coroutines.demonstrations.uncaughtexception.LoginUseCaseUncaughtException.*
+import com.techyourchance.coroutines.demonstrations.uncaughtexception.LoginUseCaseUncaughtException.Result
 import com.techyourchance.coroutines.home.ScreenReachableFromHome
 import kotlinx.coroutines.*
-import java.lang.Exception
 
 class Exercise10Fragment : BaseFragment() {
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Main.immediate)
+    private val job = SupervisorJob()
+
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        Toast.makeText(requireContext(), "Uh oh! ${throwable.message}", Toast.LENGTH_SHORT).show()
+    }
+    private val coroutineScope = CoroutineScope(job + Dispatchers.Main.immediate)
 
     override val screenTitle get() = ScreenReachableFromHome.EXERCISE_10.description
 
